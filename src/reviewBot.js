@@ -1,7 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 const core = require("@actions/core");
 const github = require("@actions/github");
-const fetch = require("node-fetch");
 
 const githubToken = process.env.GITHUB_TOKEN;
 const huggingFaceApiKey = process.env.HUGGINGFACE_API_KEY;
