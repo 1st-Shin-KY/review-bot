@@ -59,16 +59,15 @@ async function main() {
       messages: [{ role: "user", content: prompt }],
     });
 
-    const reviewComment = response.choices[0]?.delta?.content;
-    console.log(response.choices[0]);
-    // console.log(`Review Comment: ${reviewComment}`);
+    const reviewComment = response.choices[0].message;
+    console.log(`Review Comment: ${reviewComment}`);
 
-    // await octokit.issues.createComment({
-    //   owner,
-    //   repo,
-    //   issue_number: pull_number,
-    //   body: reviewComment,
-    // });
+    await octokit.issues.createComment({
+      owner,
+      repo,
+      issue_number: pull_number,
+      body: reviewComment,
+    });
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
