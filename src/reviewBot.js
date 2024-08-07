@@ -16,13 +16,17 @@ async function main() {
     const { owner, repo } = context.repo;
     const pull_number = context.payload.pull_request.number;
 
+    // console.log(`Owner: ${owner}`);
+    // console.log(`Repo: ${repo}`);
+    // console.log(`Pull Request Number: ${pull_number}`);
+
     const { data: pr } = await octokit.pulls.get({
       owner,
       repo,
       pull_number,
     });
 
-    console.log(`PR Data: ${JSON.stringify(pr)}`);
+    // console.log(`PR Data: ${JSON.stringify(pr)}`);
 
     const files = await octokit.pulls.listFiles({
       owner,
@@ -30,7 +34,7 @@ async function main() {
       pull_number,
     });
 
-    console.log(`Files: ${JSON.stringify(files.data)}`);
+    // console.log(`Files: ${JSON.stringify(files.data)}`);
 
     let changes = "";
     for (const file of files.data) {
@@ -55,16 +59,16 @@ async function main() {
       messages: [{ role: "user", content: prompt }],
     });
 
-    const reviewComment = response.choices[0].message.content;
-    console.log(`Review Comment: ${reviewComment}`);
+    const reviewComment = response.choices[0]?.delta?.content;
+    console.log(response.choices[0]);
+    // console.log(`Review Comment: ${reviewComment}`);
 
-    await octokit.issues.createComment({
-      owner,
-      repo,
-      issue_number: pull_number,
-      body: reviewComment,
-    });
-
+    // await octokit.issues.createComment({
+    //   owner,
+    //   repo,
+    //   issue_number: pull_number,
+    //   body: reviewComment,
+    // });
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
