@@ -68,6 +68,7 @@ async function main() {
       issue_number: pull_number,
       body: reviewComment,
     });
+
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
