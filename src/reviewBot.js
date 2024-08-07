@@ -68,12 +68,12 @@ async function main() {
     const reviewComment = response.data.choices[0].text;
     console.log(`Review Comment: ${reviewComment}`);
 
-    // await octokit.issues.createComment({
-    //   owner,
-    //   repo,
-    //   issue_number: pull_number,
-    //   body: reviewComment,
-    // });
+    await octokit.issues.createComment({
+      owner,
+      repo,
+      issue_number: pull_number,
+      body: reviewComment,
+    });
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
