@@ -55,7 +55,7 @@ async function main() {
     console.log(`Prompt: ${prompt}`);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       message: [{ role: "user", content: "Say this is a test" }],
       sream: true,
     });
