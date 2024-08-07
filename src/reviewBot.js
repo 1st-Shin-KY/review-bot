@@ -20,13 +20,13 @@ async function main() {
     console.log(`Repo: ${repo}`);
     console.log(`Pull Request Number: ${pull_number}`);
 
-    const { data: pr } = await octokit.pulls.get({
-      owner,
-      repo,
-      pull_number,
-    });
+    // const { data: pr } = await octokit.pulls.get({
+    //   owner,
+    //   repo,
+    //   pull_number,
+    // });
 
-    console.log(`PR Data: ${JSON.stringify(pr)}`);
+    // console.log(`PR Data: ${JSON.stringify(pr)}`);
 
     const files = await octokit.pulls.listFiles({
       owner,
@@ -36,58 +36,57 @@ async function main() {
 
     console.log(`Files: ${JSON.stringify(files.data)}`);
 
-    let changes = "";
-    for (const file of files.data) {
-      const content = await octokit.repos.getContent({
-        owner,
-        repo,
-        path: file.filename,
-      });
+    // let changes = "";
+    // for (const file of files.data) {
+    //   const content = await octokit.repos.getContent({
+    //     owner,
+    //     repo,
+    //     path: file.filename,
+    //   });
 
-      const fileContent = Buffer.from(
-        content.data.content,
-        "base64"
-      ).toString();
-      changes += `File: ${file.filename}\n${fileContent}\n\n`;
-    }
+    //   const fileContent = Buffer.from(
+    //     content.data.content,
+    //     "base64"
+    //   ).toString();
+    //   changes += `File: ${file.filename}\n${fileContent}\n\n`;
+    // }
 
-    const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
-    console.log(`Prompt: ${prompt}`);
+    // const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
+    // console.log(`Prompt: ${prompt}`);
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-    });
+    // const response = await openai.chat.completions.create({
+    //   model: "gpt-3.5-turbo",
+    //   messages: [{ role: "user", content: prompt }],
+    // });
 
-    const reviewComment = response.choices[0].message.content;
-    console.log(`Review Comment: ${reviewComment}`);
+    // const reviewComment = response.choices[0].message.content;
+    // console.log(`Review Comment: ${reviewComment}`);
 
-    for (const file of files) {
-      const lines = file.patch.split("\n");
-      let lineNumber = 0;
-      for (const line of lines) {
-        if (line.startsWith("@@")) {
-          const match = line.match(/@@ \-\d+,\d+ \+(\d+),\d+ @@/);
-          if (match) {
-            lineNumber = parseInt(match[1], 10) - 1;
-          }
-        } else if (line.startsWith("+")) {
-          lineNumber++;
-          await octokit.pulls.createReviewComment({
-            owner,
-            repo,
-            pull_number,
-            body: reviewComment,
-            path: file.filename,
-            line: lineNumber,
-            side: "RIGHT",
-          });
-        } else if (!line.startsWith("-")) {
-          lineNumber++;
-        }
-      }
-    }
-
+    // for (const file of files) {
+    //   const lines = file.patch.split("\n");
+    //   let lineNumber = 0;
+    //   for (const line of lines) {
+    //     if (line.startsWith("@@")) {
+    //       const match = line.match(/@@ \-\d+,\d+ \+(\d+),\d+ @@/);
+    //       if (match) {
+    //         lineNumber = parseInt(match[1], 10) - 1;
+    //       }
+    //     } else if (line.startsWith("+")) {
+    //       lineNumber++;
+    //       await octokit.pulls.createReviewComment({
+    //         owner,
+    //         repo,
+    //         pull_number,
+    //         body: reviewComment,
+    //         path: file.filename,
+    //         line: lineNumber,
+    //         side: "RIGHT",
+    //       });
+    //     } else if (!line.startsWith("-")) {
+    //       lineNumber++;
+    //     }
+    //   }
+    // }
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
