@@ -1,5 +1,5 @@
 const { Octokit } = require("@octokit/rest");
-const { Configuration, OpenAI } = require("openai");
+const { OpenAI } = require("openai");
 const core = require("@actions/core");
 const github = require("@actions/github");
 
@@ -8,10 +8,7 @@ const openaiApiKey = process.env.OPENAI_API_KEY;
 
 const octokit = new Octokit({ auth: githubToken });
 
-const configuration = new Configuration({
-  apiKey: openaiApiKey,
-});
-const openai = new OpenAI(configuration);
+const openai = new OpenAI({ apiKey: openaiApiKey });
 
 async function main() {
   try {
@@ -47,7 +44,10 @@ async function main() {
         path: file.filename,
       });
 
-      const fileContent = Buffer.from(content.data.content, 'base64').toString();
+      const fileContent = Buffer.from(
+        content.data.content,
+        "base64"
+      ).toString();
       changes += `File: ${file.filename}\n${fileContent}\n\n`;
     }
 
@@ -56,12 +56,12 @@ async function main() {
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
-      message: [{role: 'user', content: 'Say this is a test'}],
+      message: [{ role: "user", content: "Say this is a test" }],
       sream: true,
     });
-    
+
     for await (const chunk of response) {
-      console.log(chunk.choices[0]?.delta?.content || '');
+      console.log(chunk.choices[0]?.delta?.content || "");
       // process.stdout.write(chunk.choices[0]?.delta?.content || '');
     }
 
@@ -74,7 +74,6 @@ async function main() {
     //   issue_number: pull_number,
     //   body: reviewComment,
     // });
-
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
