@@ -1,5 +1,5 @@
 const { Octokit } = require("@octokit/rest");
-const { Configuration, OpenAIApi } = require("openai");
+const { Configuration, OpenAI } = require("openai");
 const core = require("@actions/core");
 const github = require("@actions/github");
 
@@ -11,7 +11,7 @@ const octokit = new Octokit({ auth: githubToken });
 const configuration = new Configuration({
   apiKey: openaiApiKey,
 });
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI(configuration);
 
 async function main() {
   try {
@@ -54,11 +54,16 @@ async function main() {
     const prompt = `Please review the following changes:\n${changes}`;
     console.log(`Prompt: ${prompt}`);
 
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: prompt,
-      max_tokens: 1500,
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      message: [{role: 'user', content: 'Say this is a test'}],
+      sream: true,
     });
+    
+    for await (const chunk of response) {
+      console.log(chunk.choices[0]?.delta?.content || '');
+      // process.stdout.write(chunk.choices[0]?.delta?.content || '');
+    }
 
     // const reviewComment = response.data.choices[0].text;
     // console.log(`Review Comment: ${reviewComment}`);
