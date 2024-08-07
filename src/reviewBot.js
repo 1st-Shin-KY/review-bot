@@ -1,14 +1,12 @@
-const { Octokit } = require("@octokit/rest");
-const { OpenAI } = require("openai");
-const core = require("@actions/core");
-const github = require("@actions/github");
+import Octokit  from "@octokit/rest";
+import core from "@actions/core";
+import github from "@actions/github";
+import fetch from "node-fetch";
 
 const githubToken = process.env.GITHUB_TOKEN;
-const openaiApiKey = process.env.OPENAI_API_KEY;
+const huggingFaceApiKey = process.env.HUGGINGFACE_API_KEY;
 
 const octokit = new Octokit({ auth: githubToken });
-
-const openai = new OpenAI({ apiKey: openaiApiKey });
 
 async function main() {
   try {
@@ -16,6 +14,7 @@ async function main() {
     const { owner, repo } = context.repo;
     const pull_number = context.payload.pull_request.number;
 
+    console.log(huggingFaceApiKey);
     // console.log(`Owner: ${owner}`);
     // console.log(`Repo: ${repo}`);
     // console.log(`Pull Request Number: ${pull_number}`);
@@ -54,16 +53,16 @@ async function main() {
     const prompt = `Please review the following changes:\n${changes}`;
     console.log(`Prompt: ${prompt}`);
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      message: [{ role: "user", content: "Say this is a test" }],
-      sream: true,
-    });
 
-    for await (const chunk of response) {
-      console.log(chunk.choices[0]?.delta?.content || "");
-      // process.stdout.write(chunk.choices[0]?.delta?.content || '');
-    }
+    // const response = await openai.chat.completions.create({
+    //   model: "gpt-4o-turbo",
+    //   message: [{ role: "user", content: "Say this is a test" }],
+    //   sream: true,
+    // });
+
+    // for await (const chunk of response) {
+    //   console.log(chunk.choices[0]?.delta?.content || "");
+    // }
 
     // const reviewComment = response.data.choices[0].text;
     // console.log(`Review Comment: ${reviewComment}`);
