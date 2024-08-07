@@ -49,7 +49,7 @@ async function main() {
       messages: [{ role: "user", content: prompt }],
     });
 
-    const reviewComment = response.choices[0].message;
+    const reviewComment = response.choices[0].message.content;
     console.log(`Review Comment: ${reviewComment}`);
 
     await octokit.issues.createComment({
