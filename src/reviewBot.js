@@ -26,7 +26,7 @@ async function main() {
       pull_number,
     });
 
-    console.log(`PR Data: ${JSON.stringify(pr)}`);
+    // console.log(`PR Data: ${JSON.stringify(pr)}`);
 
     const files = await octokit.pulls.listFiles({
       owner,
@@ -40,7 +40,7 @@ async function main() {
 
     let changes = "";
     for (const file of files.data) {
-      console.log(file.filename);
+      console.log(file.patch);
       // const content = await octokit.repos.getContent({
       //   owner,
       //   repo,
