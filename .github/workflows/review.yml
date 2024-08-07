@@ -14,7 +14,7 @@
 #     - name: Checkout review bot repository
 #       uses: actions/checkout@v2
 #       with:
-#         repository: your-username/review-bot-repo
+#         repository: 1st-Shin-KY/review-bot
 #         path: review-bot
 
 #     - name: Set up Node.js
