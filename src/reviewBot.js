@@ -54,14 +54,14 @@ async function main() {
     const prompt = `Please review the following changes:\n${changes}`;
     console.log(`Prompt: ${prompt}`);
 
-    // const response = await openai.createCompletion({
-    //   model: "text-davinci-003",
-    //   prompt: prompt,
-    //   max_tokens: 1500,
-    // });
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      max_tokens: 1500,
+    });
 
-    // const reviewComment = response.data.choices[0].text;
-    // console.log(`Review Comment: ${reviewComment}`);
+    const reviewComment = response.data.choices[0].text;
+    console.log(`Review Comment: ${reviewComment}`);
 
     // await octokit.issues.createComment({
     //   owner,
