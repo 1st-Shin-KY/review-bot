@@ -55,18 +55,18 @@ async function main() {
     console.log(`Prompt: ${prompt}`);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-3.5-turbo",
       message: [{ role: "user", content: "Say this is a test" }],
       sream: true,
     });
 
     for await (const chunk of response) {
       console.log(chunk.choices[0]?.delta?.content || "");
-      // process.stdout.write(chunk.choices[0]?.delta?.content || '');
+      process.stdout.write(chunk.choices[0]?.delta?.content || '');
     }
 
-    // const reviewComment = response.data.choices[0].text;
-    // console.log(`Review Comment: ${reviewComment}`);
+    const reviewComment = response.data.choices[0].text;
+    console.log(`Review Comment: ${reviewComment}`);
 
     // await octokit.issues.createComment({
     //   owner,
