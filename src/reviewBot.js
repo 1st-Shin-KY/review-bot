@@ -40,7 +40,7 @@ async function main() {
     const reviewComment = response.choices[0].message.content;
     console.log(`Review Comment: ${reviewComment}`);
 
-    for (const file of files) {
+    for (const file of files.data) {
       const lines = file.patch.split("\n");
       let lineNumber = 0;
       for (const line of lines) {
