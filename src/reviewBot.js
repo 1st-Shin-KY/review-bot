@@ -59,12 +59,7 @@ async function main() {
       messages: [{ role: "user", content: prompt }],
     });
 
-    for await (const chunk of response) {
-      console.log(chunk.choices[0]?.delta?.content || "");
-      process.stdout.write(chunk.choices[0]?.delta?.content || '');
-    }
-
-    const reviewComment = response.data.choices[0].text;
+    const reviewComment = response.choices[0]?.delta?.content;
     console.log(`Review Comment: ${reviewComment}`);
 
     await octokit.issues.createComment({
