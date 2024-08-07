@@ -35,4 +35,4 @@
 #         uses: ./review-bot
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-#           HUGGING_API_KEY: ${{ secrets.HUGGING_API_KEY }}
+#           HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
