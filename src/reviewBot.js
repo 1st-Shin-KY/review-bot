@@ -37,7 +37,7 @@ async function main() {
       messages: [{ role: "user", content: prompt }],
     });
 
-    const reviewComment = response.data.choices[0].message.content;
+    const reviewComment = response.choices[0].message.content;
     console.log(`Review Comment: ${reviewComment}`);
 
     for (const file of files) {
