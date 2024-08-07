@@ -40,65 +40,38 @@ async function main() {
     const reviewComment = response.choices[0].message.content;
     console.log(`Review Comment: ${reviewComment}`);
 
+    const { data: commits } = await octokit.pulls.listCommits({
+      owner,
+      repo,
+      pull_number,
+    });
+    const lastCommitId = commits[commits.length - 1].sha;
+
     for (const file of files.data) {
       const lines = file.patch.split("\n");
-      let lineNumber = 0;
+      let position = 0;
       for (const line of lines) {
         if (line.startsWith("@@")) {
           const match = line.match(/@@ \-\d+,\d+ \+(\d+),\d+ @@/);
           if (match) {
-            lineNumber = parseInt(match[1], 10) - 1;
+            position = parseInt(match[1], 10) - 1;
           }
         } else if (line.startsWith("+")) {
-          lineNumber++;
+          position++;
           await octokit.pulls.createReviewComment({
             owner,
             repo,
             pull_number,
             body: reviewComment,
+            commit_id: lastCommitId,
             path: file.filename,
-            line: lineNumber,
-            side: "RIGHT",
+            position: position,
           });
         } else if (!line.startsWith("-")) {
-          lineNumber++;
+          position++;
         }
       }
     }
-
-    // const response = await openai.chat.completions.create({
-    //   model: "gpt-3.5-turbo",
-    //   messages: [{ role: "user", content: prompt }],
-    // });
-
-    // const reviewComment = response.choices[0].message.content;
-    // console.log(`Review Comment: ${reviewComment}`);
-
-    // for (const file of files) {
-    //   const lines = file.patch.split("\n");
-    //   let lineNumber = 0;
-    //   for (const line of lines) {
-    //     if (line.startsWith("@@")) {
-    //       const match = line.match(/@@ \-\d+,\d+ \+(\d+),\d+ @@/);
-    //       if (match) {
-    //         lineNumber = parseInt(match[1], 10) - 1;
-    //       }
-    //     } else if (line.startsWith("+")) {
-    //       lineNumber++;
-    //       await octokit.pulls.createReviewComment({
-    //         owner,
-    //         repo,
-    //         pull_number,
-    //         body: reviewComment,
-    //         path: file.filename,
-    //         line: lineNumber,
-    //         side: "RIGHT",
-    //       });
-    //     } else if (!line.startsWith("-")) {
-    //       lineNumber++;
-    //     }
-    //   }
-    // }
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
