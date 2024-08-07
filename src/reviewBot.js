@@ -51,12 +51,12 @@ async function main() {
       changes += `File: ${file.filename}\n${fileContent}\n\n`;
     }
 
-    const prompt = `Please review the following changes:\n${changes}`;
+    const prompt = `コードレビューしてくれ:\n${changes}`;
     console.log(`Prompt: ${prompt}`);
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      message: [{ role: "user", content: "Say this is a test" }],
+      messages: [{ role: "user", content: prompt }],
       sream: true,
     });
 
