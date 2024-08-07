@@ -1,34 +1,38 @@
-# name: Review PR with GPT
+# name: Code Review
+
+# permissions:
+#   contents: read
+#   pull-requests: write
 
 # on:
 #   pull_request:
-#     types: [opened, synchronize, reopened]
+#     types: [opened, reopened, synchronize]
 
 # jobs:
 #   review:
 #     runs-on: ubuntu-latest
 #     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v2
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-#     - name: Checkout review bot repository
-#       uses: actions/checkout@v2
-#       with:
-#         repository: 1st-Shin-KY/review-bot
-#         path: review-bot
+#       - name: Checkout review bot repository
+#         uses: actions/checkout@v2
+#         with:
+#           repository: 1st-Shin-KY/review-bot
+#           path: review-bot
 
-#     - name: Set up Node.js
-#       uses: actions/setup-node@v2
-#       with:
-#         node-version: '14'
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '14'
 
-#     - name: Install dependencies
-#       run: |
-#         cd review-bot
-#         npm install
+#       - name: Install dependencies
+#         run: |
+#           cd review-bot
+#           npm install
 
-#     - name: Run review bot
-#       env:
-#         MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-#         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-#       run: node review-bot/src/reviewBot.js
+#       - name: Run GPT Code Review Bot
+#         uses: ./review-bot
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+#           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

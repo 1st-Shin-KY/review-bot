@@ -1,0 +1,13 @@
+name: "GPT Code Review Bot"
+description: "A GitHub Action to review PRs using GPT"
+author: "Your Name"
+runs:
+  using: "node12"
+  main: "src/reviewBot.js"
+inputs:
+  GITHUB_TOKEN:
+    description: "GitHub Token"
+    required: true
+  OPENAI_API_KEY:
+    description: "OpenAI API Key"
+    required: true
