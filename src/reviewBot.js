@@ -29,7 +29,7 @@ async function main() {
       changes += `File: ${file.filename}\n${file.patch}\n\n`;
     }
 
-    const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
+    const prompt = `回答はファイル名ごとにフォマットに合わせて作成してくれフォマットは以下になる：\nファイル名:{ファイル名} 内容:{内容}\n以下のコードをレビューしてくれ:\n${changes}`;
     // console.log(`Prompt: ${prompt}`);
 
     const response = await openai.chat.completions.create({
