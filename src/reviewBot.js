@@ -40,18 +40,7 @@ async function main() {
 
     let changes = "";
     for (const file of files.data) {
-      console.log(file.patch);
-      // const content = await octokit.repos.getContent({
-      //   owner,
-      //   repo,
-      //   path: file.filename,
-      // });
-
-      // const fileContent = Buffer.from(
-      //   content.data.content,
-      //   "base64"
-      // ).toString();
-      // changes += `File: ${file.filename}\n${fileContent}\n\n`;
+      changes += `File: ${file.filename}\n${file.patch}\n\n`;
     }
 
     const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
