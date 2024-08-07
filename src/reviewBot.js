@@ -37,6 +37,7 @@ async function main() {
       messages: [{ role: "user", content: prompt }],
     });
 
+    console.log(response.choices[0].message.content);
     const reviewComments = response.choices[0].message.content.split('ファイル名:').filter(comment => comment.trim() !== "").map(comment => {
       const [filename, ...content] = comment.split('内容:');
       return {
