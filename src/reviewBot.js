@@ -51,7 +51,7 @@ async function main() {
       changes += `File: ${file.filename}\n${fileContent}\n\n`;
     }
 
-    const prompt = `コードレビューしてくれ:\n${changes}`;
+    const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
     console.log(`Prompt: ${prompt}`);
 
     const response = await openai.chat.completions.create({
@@ -60,14 +60,15 @@ async function main() {
     });
 
     const reviewComment = response.choices[0]?.delta?.content;
-    console.log(`Review Comment: ${reviewComment}`);
+    console.log(response.choices[0]);
+    // console.log(`Review Comment: ${reviewComment}`);
 
-    await octokit.issues.createComment({
-      owner,
-      repo,
-      issue_number: pull_number,
-      body: reviewComment,
-    });
+    // await octokit.issues.createComment({
+    //   owner,
+    //   repo,
+    //   issue_number: pull_number,
+    //   body: reviewComment,
+    // });
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
