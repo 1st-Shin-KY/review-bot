@@ -20,13 +20,13 @@ async function main() {
     console.log(`Repo: ${repo}`);
     console.log(`Pull Request Number: ${pull_number}`);
 
-    // const { data: pr } = await octokit.pulls.get({
-    //   owner,
-    //   repo,
-    //   pull_number,
-    // });
+    const { data: pr } = await octokit.pulls.get({
+      owner,
+      repo,
+      pull_number,
+    });
 
-    // console.log(`PR Data: ${JSON.stringify(pr)}`);
+    console.log(`PR Data: ${JSON.stringify(pr)}`);
 
     const files = await octokit.pulls.listFiles({
       owner,
