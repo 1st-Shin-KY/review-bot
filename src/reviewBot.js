@@ -30,7 +30,7 @@ async function main() {
     }
 
     const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
-    console.log(`Prompt: ${prompt}`);
+    // console.log(`Prompt: ${prompt}`);
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -39,6 +39,32 @@ async function main() {
 
     const reviewComment = response.data.choices[0].message.content;
     console.log(`Review Comment: ${reviewComment}`);
+
+    for (const file of files) {
+      const lines = file.patch.split("\n");
+      let lineNumber = 0;
+      for (const line of lines) {
+        if (line.startsWith("@@")) {
+          const match = line.match(/@@ \-\d+,\d+ \+(\d+),\d+ @@/);
+          if (match) {
+            lineNumber = parseInt(match[1], 10) - 1;
+          }
+        } else if (line.startsWith("+")) {
+          lineNumber++;
+          await octokit.pulls.createReviewComment({
+            owner,
+            repo,
+            pull_number,
+            body: reviewComment,
+            path: file.filename,
+            line: lineNumber,
+            side: "RIGHT",
+          });
+        } else if (!line.startsWith("-")) {
+          lineNumber++;
+        }
+      }
+    }
 
     // const response = await openai.chat.completions.create({
     //   model: "gpt-3.5-turbo",
