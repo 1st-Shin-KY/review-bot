@@ -60,8 +60,8 @@ async function main() {
       max_tokens: 1500,
     });
 
-    const reviewComment = response.data.choices[0].text;
-    console.log(`Review Comment: ${reviewComment}`);
+    // const reviewComment = response.data.choices[0].text;
+    // console.log(`Review Comment: ${reviewComment}`);
 
     // await octokit.issues.createComment({
     //   owner,
