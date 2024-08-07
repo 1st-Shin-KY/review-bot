@@ -38,17 +38,7 @@ async function main() {
 
     let changes = "";
     for (const file of files.data) {
-      const content = await octokit.repos.getContent({
-        owner,
-        repo,
-        path: file.filename,
-      });
-
-      const fileContent = Buffer.from(
-        content.data.content,
-        "base64"
-      ).toString();
-      changes += `File: ${file.filename}\n${fileContent}\n\n`;
+      changes += `File: ${file.filename}\n${file.patch}\n\n`;
     }
 
     const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
@@ -62,12 +52,12 @@ async function main() {
     const reviewComment = response.choices[0].message;
     console.log(`Review Comment: ${reviewComment}`);
 
-    // await octokit.issues.createComment({
-    //   owner,
-    //   repo,
-    //   issue_number: pull_number,
-    //   body: reviewComment,
-    // });
+    await octokit.issues.createComment({
+      owner,
+      repo,
+      issue_number: pull_number,
+      body: reviewComment,
+    });
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
