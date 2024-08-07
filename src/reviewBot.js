@@ -16,18 +16,6 @@ async function main() {
     const { owner, repo } = context.repo;
     const pull_number = context.payload.pull_request.number;
 
-    console.log(`Owner: ${owner}`);
-    console.log(`Repo: ${repo}`);
-    console.log(`Pull Request Number: ${pull_number}`);
-
-    const { data: pr } = await octokit.pulls.get({
-      owner,
-      repo,
-      pull_number,
-    });
-
-    // console.log(`PR Data: ${JSON.stringify(pr)}`);
-
     const files = await octokit.pulls.listFiles({
       owner,
       repo,
@@ -36,8 +24,6 @@ async function main() {
 
     console.log(`Files: ${JSON.stringify(files.data)}`);
 
-
-
     let changes = "";
     for (const file of files.data) {
       changes += `File: ${file.filename}\n${file.patch}\n\n`;
@@ -45,6 +31,14 @@ async function main() {
 
     const prompt = `以下のコードをレビューしてくれ:\n${changes}`;
     console.log(`Prompt: ${prompt}`);
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const reviewComment = response.data.choices[0].message.content;
+    console.log(`Review Comment: ${reviewComment}`);
 
     // const response = await openai.chat.completions.create({
     //   model: "gpt-3.5-turbo",
