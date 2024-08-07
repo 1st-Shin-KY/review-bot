@@ -22,7 +22,7 @@ async function main() {
       pull_number,
     });
 
-    console.log(`Files: ${JSON.stringify(files.data)}`);
+    // console.log(`Files: ${JSON.stringify(files.data)}`);
 
     let changes = "";
     for (const file of files.data) {
@@ -38,6 +38,7 @@ async function main() {
     });
 
     console.log(response.choices[0].message.content);
+
     const reviewComments = response.choices[0].message.content.split('ファイル名:').filter(comment => comment.trim() !== "").map(comment => {
       const [filename, ...content] = comment.split('内容:');
       return {
@@ -46,7 +47,7 @@ async function main() {
       };
     });
 
-    console.log(`Review Comments: ${JSON.stringify(reviewComments)}`);
+    // console.log(`Review Comments: ${JSON.stringify(reviewComments)}`);
 
     // const reviewComment = response.choices[0].message.content;
     // console.log(`Review Comment: ${reviewComment}`);
